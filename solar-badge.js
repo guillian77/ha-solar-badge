@@ -19,6 +19,12 @@ class SolarBadge extends LitElement {
   UPPER_THRESHOLD = 100;
   LOWER_THRESHOLD = 100;
 
+  global_power = 0;
+  solar_power = 0;
+  battery_level = null; // Optional
+  battery_power = null; // Optional
+  grid_power = 0; // Calculated from global_power, solar_power, and battery_power.
+
   static get properties() {
     return {
       hass: {},
@@ -29,8 +35,6 @@ class SolarBadge extends LitElement {
   setConfig(config) {
     if (!config.global_power) { throw new Error("global_power is required"); }
     if (!config.solar_power) { throw new Error("solar_power is required"); }
-    if (!config.battery_power) { throw new Error("battery_power is required"); }
-    if (!config.battery_level) { throw new Error("battery_level is required"); }
 
     this.config = config;
   }
@@ -77,8 +81,9 @@ class SolarBadge extends LitElement {
 
     this.global_power = Math.floor(states[this.config.global_power].state);
     this.solar_power = Math.floor(states[this.config.solar_power].state);
-    this.battery_power = Math.floor(states[this.config.battery_power].state);
-    this.battery_level = states[this.config.battery_level].state;
+
+    if (this.config.battery_power) { this.battery_power = Math.floor(states[this.config.battery_power].state); }
+    if (this.config.battery_level) { this.battery_level = states[this.config.battery_level].state; }
 
     this.grid_power = this.calculateGridPower();
 
@@ -101,6 +106,8 @@ class SolarBadge extends LitElement {
    */
   calculateGridPower() {
     let gridPower = this.global_power - this.solar_power;
+
+    if (this.battery_power === null) { return gridPower; }
 
     if (this.battery_power > 0) {
       return gridPower + this.battery_power;
@@ -163,7 +170,7 @@ class SolarBadge extends LitElement {
    * Only shown if battery power is not equal to 0.
    */
   batteryPowerTemplate() {
-    if (this.battery_power == 0) return;
+    if (this.battery_power === null || this.battery_power == 0) return;
 
     let icon = "";
     let color = "";
@@ -185,6 +192,8 @@ class SolarBadge extends LitElement {
     * - Green: Above 80%
    */
   batteryLevelTemplate() {
+    if (this.battery_level === null) return;
+
     let color = "";
 
     if (this.battery_level < 40) { color = "#f44336"; }
