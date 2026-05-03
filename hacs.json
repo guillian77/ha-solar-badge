@@ -1,0 +1,10 @@
+{
+    "name": "Solar Badge",
+    "country": "FR",
+    "homeassistant": "2026.4.0",
+    "filename": "solar-badge.js",
+    "domain": "solar_badge",
+    "version": "1.0.0",
+    "render_readme": true,
+    "documentation": "https://github.com/guillian77/ha-solar-badge/blob/main/README.md"
+}
