@@ -59,4 +59,44 @@ global_power: sensor.global_power
 solar_power: sensor.solar_power
 battery_power: sensor.battery_power # Optionnel
 battery_level: sensor.battery_level # Optionnel
+threshold: 60 # Défaut: 50 - Optionnel
 ```
+
+### `global_power`
+
+Puissance instantannée en Watt du réseau électrique public.
+
+### `solar_power`
+
+Puissance instantannée en Watt de la production solaire.
+
+### `battery_power`
+
+Puissance instantannée en Watt provenant de la batterie.
+
+> NOTE: Puissance négative ou positive selon charge ou décharge.
+
+### `battery_level`
+
+Représentation en pourcentage de la charge de la batterie.
+
+### `threshold`
+
+Seuil de marge permettant de considérer l'installation en AUTO consommation.
+
+Exemple 1:
+```yaml
+global_power: sensor.global_power
+threshold: 60 # Défaut: 50 - Optionnel
+```
+
+`global_power = 59` alors état AUTO consommation.
+`global_power = 61` alors état GRID, utilisation du réseau public.
+
+Exemple 2:
+```yaml
+global_power: sensor.global_power
+threshold: 0 # Défaut: 50 - Optionnel
+```
+`global_power = 0` alors état AUTO consommation.
+`global_power = 1` alors état GRID, utilisation du réseau public.

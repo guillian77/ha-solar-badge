@@ -16,13 +16,11 @@ class SolarBadge extends LitElement {
   ICON_BATTERY_UP = "mdi:battery-arrow-up-outline";
   ICON_BATTERY_DOWN = "mdi:battery-arrow-down-outline";
 
-  UPPER_THRESHOLD = 100;
-  LOWER_THRESHOLD = 100;
-
   global_power = 0;
   solar_power = 0;
   battery_level = null; // Optional
   battery_power = null; // Optional
+  threshold = 50; // Optional
 
   static get properties() {
     return {
@@ -78,9 +76,12 @@ class SolarBadge extends LitElement {
   _handleStateUpdate = (states, unsubscribe) => {
     this._unsubscribe = unsubscribe;
 
+    // Mandatory properties
     this.global_power = Math.floor(states[this.config.global_power].state);
     this.solar_power = Math.floor(states[this.config.solar_power].state);
 
+    // Optional properties
+    if (this.config.threshold) { this.threshold = this.config.threshold; }
     if (this.config.battery_power) { this.battery_power = Math.floor(states[this.config.battery_power].state); }
     if (this.config.battery_level) { this.battery_level = states[this.config.battery_level].state; }
 
@@ -107,7 +108,7 @@ class SolarBadge extends LitElement {
       source = "exp";
       color = "orange";
     }
-    if(this.global_power > this.UPPER_THRESHOLD) { // IMPORTATION
+    if(this.global_power > this.threshold) { // IMPORTATION
       icon = this.ICON_IMPORT;
       source = "grid";
       color = "red";
