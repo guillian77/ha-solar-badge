@@ -39,7 +39,27 @@ Permet d'afficher les informations liées a la production solaire dans un badge.
 
 ## Installation
 
-### Manuel
+### Installation via HACS
+
+**Ajouter le dépôt**
+
+<img width="333" height="287" alt="image" src="https://github.com/user-attachments/assets/c7a13d86-9135-498b-8551-aad61bf5a847" />
+<br>
+Ajouter un "Dépôts personnalisés":
+
+- Dépôt: `https://github.com/guillian77/ha-solar-badge`
+- Type: Tableau de bord
+
+**Télécharger**
+
+Recherche `Solar Badge`.
+<img width="1749" height="292" alt="image" src="https://github.com/user-attachments/assets/cb64a83b-09d2-4395-be8e-82acc5f9158b" />
+<br>
+
+Télécharger l'intégration.
+<img width="1020" height="634" alt="image" src="https://github.com/user-attachments/assets/88835b7e-426f-4d22-a6ea-fc1278a3f356" />
+
+### Installation Manuelle
 
 1. Copier le répertoire `solar-badge` dans le répertoire: `config/www`.
 2. "Modifier le tableau de bord" > "Gérer les ressources" > "Ajouter une ressource"
