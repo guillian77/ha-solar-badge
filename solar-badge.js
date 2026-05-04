@@ -302,7 +302,7 @@ class SolarBadge extends LitElement {
 if (!customElements.get("ha-solar-badge")) {
   customElements.define("ha-solar-badge", SolarBadge);
   console.info(
-    `%c 🐲 guillian77/ha-solar-badge %c v1.0.0 `,
+    `%c 🐲 guillian77/ha-solar-badge %c v1.2.1 `,
     'color: green; font-weight: bold;background: black;',
     'background: grey; font-weight: bold; color: #fff'
   )
