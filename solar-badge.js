@@ -79,41 +79,13 @@ class SolarBadge extends LitElement {
   _handleStateUpdate = (states, unsubscribe) => {
     this._unsubscribe = unsubscribe;
 
-    this.global_power = Math.floor(states[this.config.global_power].state);
+    this.grid_power = Math.floor(states[this.config.global_power].state);
     this.solar_power = Math.floor(states[this.config.solar_power].state);
 
     if (this.config.battery_power) { this.battery_power = Math.floor(states[this.config.battery_power].state); }
     if (this.config.battery_level) { this.battery_level = states[this.config.battery_level].state; }
 
-    this.grid_power = this.calculateGridPower();
-
     if (this.requestUpdate) this.requestUpdate();
-  }
-
-  /**
-   * Calculates the grid power based on global power, solar power, and battery power.
-   *
-   * The calculation is as follows:
-   * - Start with grid power as global power minus solar power.
-   * - If battery power is positive (charging), add it to grid power.
-   * - If battery power is negative (discharging), subtract its absolute value from grid power.
-   *
-   * This calculation assumes that:
-   * - Positive battery power means energy is being drawn from the grid to charge the battery.
-   * - Negative battery power means energy is being supplied to the grid from the battery.
-    *
-    * @returns {number} The calculated grid power in watts.
-   */
-  calculateGridPower() {
-    let gridPower = this.global_power - this.solar_power;
-
-    if (this.battery_power === null) { return gridPower; }
-
-    if (this.battery_power > 0) {
-      return gridPower + this.battery_power;
-    }
-
-    return gridPower - Math.abs(this.battery_power);
   }
 
   /**
@@ -150,6 +122,14 @@ class SolarBadge extends LitElement {
     `;
   }
 
+  globalPowerTemplate() {
+    return html`
+      <span class="power" @click="${this._openDialog}" data-entity="${this.config.global_power}">
+        <ha-icon icon="${this.ICON_GRID}"></ha-icon> ${this.grid_power} W
+      </span>
+    `;
+  }
+
   /**
    * Displays the solar power with a solar icon.
    *
@@ -158,7 +138,8 @@ class SolarBadge extends LitElement {
   solarPowerTemplate() {
     if (this.solar_power == 0) return;
 
-    return html`<span class="power">
+    return html`
+    <span class="power" @click="${this._openDialog}" data-entity="${this.config.solar_power}">
       <ha-icon icon="${this.ICON_SOLAR}"></ha-icon>
       <span>${this.solar_power}W</span>
     </span>`;
@@ -178,7 +159,8 @@ class SolarBadge extends LitElement {
     if (this.battery_power > 0) { icon = this.ICON_BATTERY_UP; color = "#4caf50"; }
     if (this.battery_power < 0) { icon = this.ICON_BATTERY_DOWN; color = "#f44336"; }
 
-    return html`<span class="power">
+    return html`
+    <span class="power" @click="${this._openDialog}" data-entity="${this.config.battery_power}">
       <ha-icon icon="${icon}" style="color: ${color};"></ha-icon>
       <span>${this.battery_power}W</span>
     </span>`;
@@ -201,7 +183,7 @@ class SolarBadge extends LitElement {
     if (this.battery_level >= 80) { color = "#4caf50"; }
 
     return html`
-      <span class="power">
+      <span class="power" @click="${this._openDialog}" data-entity="${this.config.battery_level}">
         <ha-icon icon="${this.ICON_BATTERY}" style="color: ${color};"></ha-icon>
         <span>${this.battery_level}%</span>
       </span>
@@ -217,7 +199,7 @@ class SolarBadge extends LitElement {
         <div class="wrapper">
           ${this.stateIconTemplate()}
           <p>
-            <span class="power"><ha-icon icon="${this.ICON_GRID}"></ha-icon> ${this.grid_power} W</span>
+            ${this.globalPowerTemplate()}
             ${this.solarPowerTemplate()}
             ${this.batteryPowerTemplate()}
             ${this.batteryLevelTemplate()}
@@ -225,6 +207,20 @@ class SolarBadge extends LitElement {
         </div>
       </ha-badge>
     `;
+  }
+
+  _openDialog(e) {
+    const target    = e.target.closest('[data-entity]');
+    const entityId  = target.dataset.entity;
+
+    // Fire the event that opens the standard dialog
+    const event = new Event('hass-more-info', {
+      bubbles: true,
+      composed: true,
+    });
+
+    event.detail = { entityId: entityId }; // Replace with your actual entity ID
+    this.dispatchEvent(event);
   }
 
   /***
