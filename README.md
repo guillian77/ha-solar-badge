@@ -56,6 +56,7 @@ Permet d'afficher les informations liées a la production solaire dans un badge.
 ```yaml
 type: custom:ha-solar-badge
 global_power: sensor.global_power
+home_power: sensor.home_power # Optionnel
 solar_power: sensor.solar_power
 battery_power: sensor.battery_power # Optionnel
 battery_level: sensor.battery_level # Optionnel
@@ -66,6 +67,10 @@ battery_power_inversion: false # Défaut: false - Optionnel
 ### `global_power`
 
 Puissance instantannée en Watt du réseau électrique public.
+
+### `home_power`
+
+Puissance instantannée représentant le consommation de la maison.
 
 ### `solar_power`
 

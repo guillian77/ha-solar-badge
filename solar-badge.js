@@ -11,6 +11,7 @@ class SolarBadge extends LitElement {
   ICON_AUTO = "mdi:refresh-auto";
 
   ICON_GRID = "mdi:transmission-tower-import";
+  ICON_HOME = "mdi:home";
   ICON_SOLAR = "mdi:solar-power";
   ICON_BATTERY = "mdi:battery";
   ICON_BATTERY_UP = "mdi:battery-arrow-up-outline";
@@ -18,6 +19,7 @@ class SolarBadge extends LitElement {
 
   global_power = 0;
   solar_power = 0;
+  home_power = null; // Optional
   battery_level = null; // Optional
   battery_power = null; // Optional
   threshold = 50; // Optional
@@ -84,6 +86,7 @@ class SolarBadge extends LitElement {
     // Optional properties
     if (this.config.threshold) { this.threshold = this.config.threshold; }
     if (this.config.battery_level) { this.battery_level = states[this.config.battery_level].state; }
+    if (this.config.home_power) { this.home_power = Math.floor(states[this.config.home_power].state); }
     if (this.config.battery_power_inversion) { this.battery_power_inversion = this.config.battery_power_inversion; }
     if (this.config.battery_power) {
       this.battery_power = Math.floor(states[this.config.battery_power].state);
@@ -139,6 +142,16 @@ class SolarBadge extends LitElement {
     return html`
       <span class="power" @click="${this._openDialog}" data-entity="${this.config.global_power}">
         <ha-icon icon="${this.ICON_GRID}"></ha-icon> ${this.global_power} W
+      </span>
+    `;
+  }
+
+  homePowerTemplate() {
+    if (this.home_power === null) return;
+
+    return html`
+      <span class="power" @click="${this._openDialog}" data-entity="${this.config.home_power}">
+        <ha-icon icon="${this.ICON_HOME}"></ha-icon> ${this.home_power} W
       </span>
     `;
   }
@@ -213,6 +226,7 @@ class SolarBadge extends LitElement {
           ${this.stateIconTemplate()}
           <p>
             ${this.globalPowerTemplate()}
+            ${this.homePowerTemplate()}
             ${this.solarPowerTemplate()}
             ${this.batteryPowerTemplate()}
             ${this.batteryLevelTemplate()}
