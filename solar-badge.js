@@ -21,6 +21,7 @@ class SolarBadge extends LitElement {
   battery_level = null; // Optional
   battery_power = null; // Optional
   threshold = 50; // Optional
+  battery_power_inversion = false; // Optional
 
   static get properties() {
     return {
@@ -82,8 +83,15 @@ class SolarBadge extends LitElement {
 
     // Optional properties
     if (this.config.threshold) { this.threshold = this.config.threshold; }
-    if (this.config.battery_power) { this.battery_power = Math.floor(states[this.config.battery_power].state); }
     if (this.config.battery_level) { this.battery_level = states[this.config.battery_level].state; }
+    if (this.config.battery_power_inversion) { this.battery_power_inversion = this.config.battery_power_inversion; }
+    if (this.config.battery_power) {
+      this.battery_power = Math.floor(states[this.config.battery_power].state);
+
+      // Invert battery power if the option is enabled.
+      // Useful for certain configurationswhere charging/discharging is reversed.
+      if (this.battery_power_inversion) { this.battery_power = -this.battery_power; }
+    }
 
     if (this.requestUpdate) this.requestUpdate();
   }

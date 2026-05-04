@@ -60,6 +60,7 @@ solar_power: sensor.solar_power
 battery_power: sensor.battery_power # Optionnel
 battery_level: sensor.battery_level # Optionnel
 threshold: 60 # Défaut: 50 - Optionnel
+battery_power_inversion: false # Défaut: false - Optionnel
 ```
 
 ### `global_power`
@@ -100,3 +101,17 @@ threshold: 0 # Défaut: 50 - Optionnel
 ```
 `global_power = 0` alors état AUTO consommation.
 `global_power = 1` alors état GRID, utilisation du réseau public.
+
+### `battery_power_inversion`
+
+Utile dans le cas où la puissance de votre batterie est inversée.
+
+Par défaut, `battery_power_inversion` est a `false`.
+
+**FALSE**
+Puissance négative: décharge de la batterie.
+Puissance positive: charge de la batterie.
+
+**TRUE**
+Puissance négative: charge de la batterie.
+Puissance positive: décharge de la batterie.
