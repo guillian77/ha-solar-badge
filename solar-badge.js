@@ -276,7 +276,10 @@ class SolarBadge extends LitElement {
       .source-name.orange { color: orange; }
       .source-name.green { color: green; }
 
-      .power { margin-right: 6px; }
+      .power {
+        cursor: pointer;
+        margin-right: 6px;
+      }
     `;
   }
 }
