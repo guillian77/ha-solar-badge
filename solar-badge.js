@@ -23,7 +23,6 @@ class SolarBadge extends LitElement {
   solar_power = 0;
   battery_level = null; // Optional
   battery_power = null; // Optional
-  grid_power = 0; // Calculated from global_power, solar_power, and battery_power.
 
   static get properties() {
     return {
@@ -79,7 +78,7 @@ class SolarBadge extends LitElement {
   _handleStateUpdate = (states, unsubscribe) => {
     this._unsubscribe = unsubscribe;
 
-    this.grid_power = Math.floor(states[this.config.global_power].state);
+    this.global_power = Math.floor(states[this.config.global_power].state);
     this.solar_power = Math.floor(states[this.config.solar_power].state);
 
     if (this.config.battery_power) { this.battery_power = Math.floor(states[this.config.battery_power].state); }
@@ -103,12 +102,12 @@ class SolarBadge extends LitElement {
     let source = "AUTO";
     let color = "green";
 
-    if(this.grid_power < 0) { // SURPRODUCTION
+    if(this.global_power < 0) { // SURPRODUCTION
       icon = this.ICON_EXPORT;
       source = "exp";
       color = "orange";
     }
-    if(this.grid_power > this.UPPER_THRESHOLD) { // IMPORTATION
+    if(this.global_power > this.UPPER_THRESHOLD) { // IMPORTATION
       icon = this.ICON_IMPORT;
       source = "grid";
       color = "red";
@@ -122,10 +121,15 @@ class SolarBadge extends LitElement {
     `;
   }
 
+  /**
+   * Displays the global power with a grid icon.
+   *
+   * Always shown, even if the value is 0, as it represents the overall power balance with the grid.
+   */
   globalPowerTemplate() {
     return html`
       <span class="power" @click="${this._openDialog}" data-entity="${this.config.global_power}">
-        <ha-icon icon="${this.ICON_GRID}"></ha-icon> ${this.grid_power} W
+        <ha-icon icon="${this.ICON_GRID}"></ha-icon> ${this.global_power} W
       </span>
     `;
   }
