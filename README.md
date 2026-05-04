@@ -51,10 +51,12 @@ Permet d'afficher les informations liées a la production solaire dans un badge.
 
 ## Configurations
 
+> ℹ️ Les entités concernant la batterie sont optionelles.
+
 ```yaml
 type: custom:ha-solar-badge
 global_power: sensor.global_power
 solar_power: sensor.solar_power
-battery_power: sensor.battery_power
-battery_level: sensor.battery_level
+battery_power: sensor.battery_power # Optionnel
+battery_level: sensor.battery_level # Optionnel
 ```
