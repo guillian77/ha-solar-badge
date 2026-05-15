@@ -102,7 +102,7 @@ class SolarBadge extends LitElement {
   /**
    * Determines the icon, source label, and color based on the grid power value.
    *
-   * - If grid power is less than 0, it indicates surplus production (exporting to the grid).
+   * - If grid power is less than the lower threshold, it indicates surplus production (exporting to the grid).
    * - If grid power is greater than the upper threshold, it indicates importation from the grid.
    * - Otherwise, it defaults to auto mode (no grid usage).
     *
@@ -114,7 +114,7 @@ class SolarBadge extends LitElement {
     let source = "AUTO";
     let color = "green";
 
-    if(this.global_power < 0) { // SURPRODUCTION
+    if(this.global_power < this.threshold) { // SURPRODUCTION
       icon = this.ICON_EXPORT;
       source = "exp";
       color = "orange";
