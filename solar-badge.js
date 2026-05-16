@@ -114,7 +114,7 @@ class SolarBadge extends LitElement {
     let source = "AUTO";
     let color = "green";
 
-    if(this.global_power < this.threshold) { // SURPRODUCTION
+    if(this.global_power < -this.threshold) { // SURPRODUCTION
       icon = this.ICON_EXPORT;
       source = "exp";
       color = "orange";
@@ -321,7 +321,7 @@ class SolarBadge extends LitElement {
 if (!customElements.get("ha-solar-badge")) {
   customElements.define("ha-solar-badge", SolarBadge);
   console.info(
-    `%c 🐲 guillian77/ha-solar-badge %c v1.2.2 `,
+    `%c 🐲 guillian77/ha-solar-badge %c v1.2.3`,
     'color: green; font-weight: bold;background: black;',
     'background: grey; font-weight: bold; color: #fff'
   )
